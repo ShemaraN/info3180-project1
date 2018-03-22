@@ -4,7 +4,24 @@
 <h2 class="header"> List of Profiles</h2>
 
 {% for user in users %}
+    <div class="row photo">
+            <img class="card-img-top" src="{{url_for('static', filename='uploads/'+ user.photo) }}" alt="Profile picture">
+        </div>
+        
+        <p>
+            {{user.first_name}} {{user.last_name}}
+            {{user.email}}
+            {{user.location}}
+            {{user.biography}}
+            {{user.date_created}}
+            <a href='/profiles/{{user.id}}'>View Profile</a>
+        </p>
+        
+        <div>
+            <button type="submit" name="submit" class="btn btn-primary btn-block">Send a Message </button>
+            <button type="submit" name="submit" class="btn btn-primary btn-block">Follow</button>
+        </div>
 
-{%end for%}
+{% endfor %}
 
 {% endblock %}

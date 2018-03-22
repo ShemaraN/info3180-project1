@@ -24,7 +24,8 @@ class UserProfile(db.Model):
         self.gender       = gender
         self.biography    = biography
         self.photo        = photo
-        #self.date_created = date_created
+        self.date_created = timeinfo()
+
     
 
     def is_authenticated(self):
@@ -41,4 +42,8 @@ def get_new_id(self):
         return unicode(self.id)
     except NameError:
         return str(self.id) 
+        
+def timeinfo():
+    d = date.today();
+    return "{0:%A}, {0:%B} {0:%d}, {0:%y}".format(d)
 	   
