@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<body>
+	
+<div class="card">
+  <div class="card-body">
+   	 <div class="top">
+      		<div class="row photo">
+    	  		<img class="card-img-top" src="{{url_for('static', filename='uploads/'+user.photo) }}" alt="Profile picture">
+    	   </div>
+ 	  	<div class="info">
+      	  	<div>
+      	  		<h2>{{user.first_name}} {{user.last_name}}</h2> <br>
+      	    	<h3> {{user.email}} </h3> <br>
+      	    	<h3> {{user.location}}</h3> <br>
+      	    	<h3> Joined on {{ created_on }}</h3>
+      	  	</div>
+   	 </div>
+   	<div class="base">
+   		<h5>About Me</h5>
+   		<p class="card-text">{{user.biography}}</p> 
+   		<div class="container">
+ 			<div class="row">
+ 				<a href="#" class="btn btn-primary">Send Message</a>
+ 				<a href="#" class="btn btn-primary">Follow</a>
+ 			</div>
+   </div>
+	 </div>
+	</div>
+</body>
+
+{% endblock %}
+

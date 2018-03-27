@@ -49,9 +49,9 @@ def profile():
         return redirect(url_for('profiles'))
     else:
         flash('This email is already linked to a profile.', 'danger')
-        return render_template('about.html', form = form)
+        return render_template('profile.html', form =form)
         
-    return render_template('about.html',form=form)
+    return render_template('profile.html',form=form)
     
 @app.route('/profiles')
 def profiles():
@@ -65,7 +65,7 @@ def show_profile(userid):
         user =UserProfile.query.filter_by(id=userid).first()
         photo= get_uploaded_images()
         print user
-    return render_template('profile.html',user=user,photo=photo,created_on = format_date_joined())
+    return render_template('user.html',user=user,photo=photo,created_on = format_date_joined())
     
 def get_uploaded_images():
     rootdir = os.getcwd()
