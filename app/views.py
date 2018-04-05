@@ -5,11 +5,11 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 import os
-from app import app, db, models, forms
+import datetime
+from app import app, db
 from flask import render_template, request, redirect, url_for, flash, session, send_from_directory
 from models import UserProfile
 from sqlalchemy.sql import exists
-from datetime import datetime, date
 from forms import UserForm
 from werkzeug import SharedDataMiddleware
 from werkzeug.utils import secure_filename
@@ -29,7 +29,8 @@ def about():
 @app.route('/profile', methods=['POST','GET'])
 def profile():
     form = UserForm()
-    user= None
+    now = datetime.datetime.now()
+    
     if request.method =='POST' and form.validate_on_submit():
         first_name = form.first_name.data
         last_name = form.last_name.data
@@ -38,51 +39,48 @@ def profile():
         gender = form.gender.data
         biography=form.biography.data
         photo=form.photo.data
+        date_created=now.strftime("%B %d, %Y")
         filename= secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        photo=photo.filename
         
-        user = UserProfile(first_name = first_name, last_name = last_name, 
-        gender = gender, biography = biography, photo = filename, location = location, email = email)
+        user = UserProfile.query.filter_by(first_name=first_name).first()
+        if user is None :
+            user = UserProfile(first_name = first_name, last_name = last_name, email = email, location = location, gender = gender, biography = biography, photo = filename, date_created=date_created)
+            db.session.add(user)
+            db.session.commit()
+            flash('Profile was successfully added.', 'success')
+            return redirect(url_for('profiles'))
+        else:
+            flash("already a member", 'danger')
 
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('profiles'))
-    else:
-        flash('This email is already linked to a profile.', 'danger')
-        return render_template('profile.html', form =form)
-        
+    flash_errors(form)
     return render_template('profile.html',form=form)
     
 @app.route('/profiles')
 def profiles():
-    users = UserProfile.query.all()
-    print(users)
-    return render_template('profiles.html', users = users)
+    Users = UserProfile.query.order_by(UserProfile.first_name).all()
+    print(Users)
+    return render_template('profiles.html', users = Users)
     
 @app.route('/profiles/<userid>')  
-def show_profile(userid):
-    if userid:
-        user =UserProfile.query.filter_by(id=userid).first()
-        photo= get_uploaded_images()
-        print user
-    return render_template('user.html',user=user,photo=photo,created_on = format_date_joined())
-    
-def get_uploaded_images():
-    rootdir = os.getcwd()
-    print rootdir
-    ls =[]
-    for subdir, files in os.walk(rootdir + '/app/static/uploads'):
-        for file in files:
-            ls.append(os.path.join(subdir, file).split('/')[-1])
-    return ls
-    
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-    
-def format_date_joined():
-    created_on = date(2018, 3, 12)
-    return created_on.strftime("%B %e, %Y")
+def displayprofiles(userid):
+    print(userid,1)
+    User =UserProfile.query.filter_by(id=userid).first()
+    return render_template('user.html',user=User)
+
+# Flash errors from the form if validation fails
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'danger')
+
+###
+# The functions below should be applicable to all Flask apps.
+###
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
