@@ -39,12 +39,12 @@ def profile():
         gender = form.gender.data
         biography=form.biography.data
         photo=form.photo.data
-        date_created=now.strftime("%B %d, %Y")
+        data_created=now.strftime("%B %d, %Y")
         filename= secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
         photo=photo.filename
         
-        user = UserProfile.query.filter_by(first_name=first_name).first()
+        user = UserProfile.query.filter_by(fisrt_name=firsname).first()
         if user is None :
             user = UserProfile(first_name = first_name, last_name = last_name, email = email, location = location, gender = gender, biography = biography, photo = filename, date_created=date_created)
             db.session.add(user)
@@ -59,15 +59,13 @@ def profile():
     
 @app.route('/profiles')
 def profiles():
-    Users = UserProfile.query.order_by(UserProfile.first_name).all()
-    print(Users)
+    Users = UserProfile.query.order_by(UserProfile.last_name).all()
     return render_template('profiles.html', users = Users)
     
 @app.route('/profiles/<userid>')  
-def displayprofiles(userid):
-    print(userid,1)
+def userid(userid):
     User =UserProfile.query.filter_by(id=userid).first()
-    return render_template('user.html',user=User)
+    return render_template('userid.html',user=User)
 
 # Flash errors from the form if validation fails
 def flash_errors(form):
