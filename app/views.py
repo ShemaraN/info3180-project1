@@ -44,7 +44,7 @@ def profile():
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
         photo=photo.filename
         
-        user = UserProfile.query.filter_by(fisrt_name=firsname).first()
+        user = UserProfile.query.filter_by(first_name=first_name).first()
         if user is None :
             user = UserProfile(first_name = first_name, last_name = last_name, email = email, location = location, gender = gender, biography = biography, photo = filename, date_created=date_created)
             db.session.add(user)

@@ -1,3 +1,51 @@
 body {
     padding-top: 5rem;
+    background-color: #cce6ff;
+}
+
+.rowphoto{
+    width: 10%;
+    height: 45%;
+    margin: 10px;
+    margin-top: 5px;
+    float:left;
+    margin-right: 30px;
+}
+
+.header{
+    text-align: left;
+}
+
+.contain{
+    border-top-style: solid;
+    border-top-color:blue; 
+    background-color: white;
+    border-radius: 10px;
+    border-width: -10px ;
+    padding: 15px 20px 15px;
+    margin-right: 250px;
+}
+
+.btn.btn-primary{
+    background-color: #32CD32;
+    border-style: none;
+    margin-left:350px;
+    width:20%;
+    position: absolute;
+    margin-top:-75px;
+    
+}
+
+.personal{
+    text-align: center;
+}
+
+
+.btn.btn-primary.btn-block{
+    background-color: blue;
+}
+
+form{
+    height: 500px;
+    border-bottom-style: solid;
 }

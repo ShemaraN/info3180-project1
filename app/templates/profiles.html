@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h2 class="header"> List of Profiles</h2>
+<h2 class="header"> Profiles</h2>
 
 {% for users in users %}
-    <div class="row photo">
+ <div class="contain">
+       <div class="rowphoto">
             <img class="card-img-top" src="{{url_for('static', filename='uploads/'+ users.photo) }}" alt="Profile picture">
         </div>
-        
-        <p>
+       <p class="personal">
        <h3> {{users.first_name}} {{users.last_name}} </h3>    
        <h5> {{users.gender}} </h5>   
        <h5> {{users.location}} </h5>    
-            <a href="{{ url_for( 'userid', userid=users.id) }}" class="btn btn-primary but">View Profile</a> 
+       <a href="{{ url_for( 'userid', userid=users.id) }}" class="btn btn-primary">View Profile</a> 
        </p>
-
+        
+ </div>
 {% endfor %}
 
 {% endblock %}
